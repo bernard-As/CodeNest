@@ -1,0 +1,116 @@
+.hero-section {
+  background: linear-gradient(135deg, #4a90e2, #50c9c3);
+  text-align: center;
+  padding: 4rem 1rem;
+  color: #fff;
+
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+
+      .primary-btn {
+        background-color: #0056b3 !important;
+        color: white !important;
+        font-size: 1.2rem;
+      }
+
+      .secondary-btn {
+        border-color: white !important;
+        color: white !important;
+        font-size: 1.2rem;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.2) !important;
+        }
+      }
+    }
+  }
+}
+
+.features-section {
+  padding: 3rem 1rem;
+  text-align: center;
+
+  h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .features {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+
+    .feature-card {
+      width: 300px;
+
+      i {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #4a90e2;
+      }
+
+      h3 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        font-size: 1rem;
+        color: #666;
+      }
+    }
+  }
+}
+
+.stats-section {
+  background-color: #f9f9f9;
+  padding: 3rem 1rem;
+  text-align: center;
+
+  h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+
+    .stat-card {
+      width: 200px;
+
+      p-card {
+        text-align: center;
+
+        h3 {
+          font-size: 2rem;
+          margin-bottom: 0.5rem;
+        }
+
+        p {
+          font-size: 1rem;
+          color: #666;
+        }
+      }
+    }
+  }
+}

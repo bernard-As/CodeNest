@@ -1,0 +1,30 @@
+<p-menubar [model]="items" styleClass="top-menu" class="header-menu">
+    <ng-template pTemplate="start">
+      <span class="logo"><img src="codenest.webp" alt="CodeNest" class="menu-logo"></span>
+    </ng-template>
+    <ng-template pTemplate="end">
+        <!-- <i
+            class="pi pi-search menu-icon"
+            (click)="searchPanel.toggle($event)"
+        ></i> -->
+        <p-overlayPanel #searchPanel>
+            <p-autoComplete
+              [(ngModel)]="searchQuery"
+              [suggestions]="filteredSuggestions"
+              (completeMethod)="search($event)"
+              [placeholder]="'Search projects...'"
+              field="name"
+              [dropdown]="true"
+              (onSelect)="onSelect($event)"
+              styleClass="menu-search"
+            ></p-autoComplete>
+          </p-overlayPanel>
+        <p-button 
+            *ngIf="!appStore.userLoggedIn" 
+            [routerLink]="'/login'"
+        >
+            <i class="pi pi-sign-in" ></i>Login
+        </p-button>
+        <p-button *ngIf="appStore.userLoggedIn" (click)="appStore.logout()">Logout</p-button>
+    </ng-template>
+</p-menubar>

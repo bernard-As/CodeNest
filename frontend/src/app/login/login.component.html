@@ -1,0 +1,31 @@
+<p-card header="Login" class="login-class">
+    <div class="p-fluid">
+      <!-- email Field -->
+      <div class="p-field">
+        <label for="email">Email (Enter your RDU emial addess)</label>
+        <input 
+            type="email"
+            pInputText 
+            id="email" 
+            [(ngModel)]="email"  
+            required/>
+        <p-message *ngIf="email && email.trim() === ''" severity="error" text="email is required."></p-message>
+      </div>
+  
+      <!-- Password Field -->
+      <div class="p-field"  *ngIf="showPassword">
+        <label for="password">Password</label>
+        <p-password id="password" [(ngModel)]="password" required></p-password>
+        <p-message *ngIf="password && password.trim() === ''" severity="error" text="Password is required."></p-message>
+      </div>
+  
+      <!-- Login Button -->
+      <div class="p-field">
+        <p-button label="Login" icon="pi pi-sign-in" (click)="onLogin()"></p-button>
+      </div>
+  
+      <!-- Error Message -->
+      <p-message *ngIf="loginError" severity="error" text="{{errorText}}"/>
+    </div>
+  </p-card>
+  

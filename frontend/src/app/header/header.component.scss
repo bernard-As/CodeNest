@@ -1,0 +1,58 @@
+.top-menu {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background: #007ad9;
+    color: #fff;
+    border: none;
+  }
+  
+  .top-menu .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-left: 1rem;
+    color: #fff;
+    height: 50px;
+    width: 50px;
+  }
+  
+  .p-menubar .p-button {
+    margin-right: 1rem;
+  }
+  
+.menu-logo{
+    max-width: 50px;
+    border-radius: 8px;
+    margin-right: 5px;
+}
+
+/* Hide search bar and display search icon on smaller screens */
+.menu-search {
+    width: 250px;
+  }
+  
+  .menu-icon {
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .menu-search {
+      display: none; /* Hide the regular search bar */
+    }
+    .menu-icon {
+      display: inline-block; /* Show the search icon */
+    }
+  }
+
+
+.header-menu{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+}
+
