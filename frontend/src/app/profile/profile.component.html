@@ -1,0 +1,86 @@
+<p-card header="Profile" *ngIf="appStore.userLoggedIn"  mobxAutorun>
+    <div class="profile-header">
+      <!-- Profile Picture -->
+      <div class="profile-picture">
+        <p-avatar 
+          [image]="profilePicture" 
+          size="xlarge" 
+          shape="circle"
+        ></p-avatar>
+        <p-fileUpload 
+          mode="basic" 
+          [customUpload]="true" 
+          (uploadHandler)="onUpload($event)" 
+          [auto]="true" 
+          accept="image/*" 
+          chooseLabel="Change"
+          name="image"
+        ></p-fileUpload>
+      </div>
+  
+      <!-- Profile Info -->
+      <div class="profile-info">
+        <h2>{{ firstName }} {{ lastName }}</h2>
+        <p>{{ departmentName }}</p>
+      </div>
+    </div>
+  
+    <p-divider></p-divider>
+  
+    <!-- Editable Profile Details -->
+    <div class="profile-edit">
+      <p-panel header="Edit Profile">
+        <div class="p-fluid">
+          <div class="p-field">
+            <label for="firstName">First Name</label>
+            <input
+                pInputText
+                id="firstName" 
+                [(ngModel)]="firstName"
+                placeholder="Enter your first name"
+            />
+          </div>
+  
+          <div class="p-field">
+            <label for="lastName">Last Name</label>
+            <input
+                pInputText
+                id="lastName" 
+                 [(ngModel)]="lastName" 
+                 placeholder="Enter your last name"
+                placeholder="Enter your first name"
+            />
+          </div>
+  
+          <div class="p-field">
+            <label for="department">Department</label>
+            <p-dropdown 
+              id="department" 
+              [(ngModel)]="department" 
+              [options]="departments" 
+              (onChange)="updateDepartmentName()"
+              placeholder="Select a department">
+            </p-dropdown>
+          </div>
+  
+          <div class="p-field" pTooltip="Your area of Interest">
+            <label for="tags">Area of Interest (Tags)</label>
+            <p-chips 
+              id="tags" 
+              [(ngModel)]="tags" 
+              placeholder="Add tags">
+            </p-chips>
+          </div>
+  
+          <p-button 
+            label="Save Changes" 
+            icon="pi pi-save" 
+            (click)="saveProfile()">
+          </p-button>
+        </div>
+      </p-panel>
+    </div>
+</p-card>
+<p-card header="...Loading" *ngIf="!appStore.userLoggedIn">
+
+</p-card>

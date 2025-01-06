@@ -1,4 +1,11 @@
-<p-card header="Login" class="login-class">
+<p-toast/>
+<p-card 
+    header="Login" 
+    class="login-class shadow-4 animation-duration-1000 animation-ease-in-out"
+    pAnimateOnScroll
+    enterClass="flipup"
+    leaveClass="fadeout"
+>
     <div class="p-fluid">
       <!-- email Field -->
       <div class="p-field">
@@ -18,7 +25,12 @@
         <p-password id="password" [(ngModel)]="password" required></p-password>
         <p-message *ngIf="password && password.trim() === ''" severity="error" text="Password is required."></p-message>
       </div>
-  
+      <!--Auth Code Field-->
+      <div class="p-field"  *ngIf="showCodePanel">
+        <label for="auth_code">An authentication code has been sent to you email above. Please enter the code in the field below</label>
+        <p-inputOtp id="auth_code" [(ngModel)]="auth_code" [length]="6" required/>
+        <p-message *ngIf="auth_code && auth_code.trim() === ''" severity="error" text="Authentication code is required."></p-message>
+      </div>
       <!-- Login Button -->
       <div class="p-field">
         <p-button label="Login" icon="pi pi-sign-in" (click)="onLogin()"></p-button>
@@ -29,3 +41,21 @@
     </div>
   </p-card>
   
+    <p-dialog
+      header="Logout?" 
+      [modal]="true"
+      [(visible)]="appStore.userLoggedIn" 
+      [style]="{ width: '50rem' }" 
+      [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+      
+    >
+      <p class="mb-5">
+        You  are already login. Would you like to logout?
+      </p>
+      <a onclick="window.location.href='/'" class="p-button font-bold logout-login" >
+        Go back
+      </a>
+      <p-button severity="danger" (onClick)="appStore.logout()" class="logout-login">
+        Logout?
+      </p-button>
+    </p-dialog>

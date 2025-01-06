@@ -1,0 +1,75 @@
+<div class="project-container">
+    <!-- Search Bar -->
+    <div class="search-filter">
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="searchQuery"
+        (input)="searchProjects()"
+        placeholder="Search projects..."
+        class="search-box"
+      />
+      <p-dropdown
+        [options]="categories"
+        [(ngModel)]="filterCategory"
+        (onChange)="filterProjects()"
+        placeholder="Filter by category"
+        class="filter-dropdown"
+      ></p-dropdown>
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="project-grid">
+      <div *ngFor="let project of filteredProjects" class="project-card">
+        <p-card
+          class="p-mb-3"
+          styleClass="h-full"
+          [style]="{height:'400px'}"
+        >
+        <img 
+        [src]="project.image || 'https://via.placeholder.com/400x200'" 
+        alt="{{ project.name }}" 
+        class="project-image"
+      />
+
+      <!-- Project Details -->
+      <div class="project-details">
+        <h2>{{ project.name }}</h2>
+        <span class="creator">By {{project.creator}}</span>
+        <p>{{ project.description }}</p>
+      </div>
+
+      <!-- Project Type and Tags -->
+      <div class="project-meta">
+        <p-chip
+          label="{{ project.project_type?.name }}" 
+          class="project-type"
+        ></p-chip>
+        <div class="tags"
+          pTooltip="{{tooltipText(project.id)}}"
+        >
+          <p-chip
+            *ngFor="let tag of project.tags" 
+            label="{{ tag.name }}" 
+            class="tag"
+          ></p-chip>
+        </div>
+      </div>
+
+      <!-- Project Stats -->
+      <div class="project-stats">
+        <span>
+          <i class="pi pi-users"></i> {{ project.collaborators }} Collaborators
+        </span>
+        <span>
+          <i class="pi pi-comment"></i> {{ project.comments }} Comments
+        </span>
+        <span (click)="likeProject(project.id)">
+          <i class="pi pi-thumbs-up activity {{likedProjects.includes(project.id)&&'activity'}}"></i> {{ project.likes }} Likes
+        </span>
+      </div>
+        </p-card>
+      </div>
+    </div>
+  </div>
+  

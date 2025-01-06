@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { RippleModule } from 'primeng/ripple';
 import { BrowserModule } from '@angular/platform-browser';
 import { HeaderComponent } from './header/header.component';
+import { MobxAngularModule } from 'mobx-angular';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,8 @@ import { HeaderComponent } from './header/header.component';
   imports: [
     RouterOutlet,
     RippleModule,
-    HeaderComponent
+    HeaderComponent,
+    MobxAngularModule
     
   ],
   templateUrl: './app.component.html',

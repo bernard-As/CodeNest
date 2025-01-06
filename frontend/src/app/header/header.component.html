@@ -1,30 +1,43 @@
+<p-toast/>
 <p-menubar [model]="items" styleClass="top-menu" class="header-menu">
     <ng-template pTemplate="start">
       <span class="logo"><img src="codenest.webp" alt="CodeNest" class="menu-logo"></span>
     </ng-template>
-    <ng-template pTemplate="end">
+    <ng-template pTemplate="end" #end>
         <!-- <i
             class="pi pi-search menu-icon"
             (click)="searchPanel.toggle($event)"
         ></i> -->
-        <p-overlayPanel #searchPanel>
-            <p-autoComplete
+        <div
+          class="flex items-center gap-2 header-image-l"
+        >
+        <p-autoComplete
               [(ngModel)]="searchQuery"
               [suggestions]="filteredSuggestions"
               (completeMethod)="search($event)"
               [placeholder]="'Search projects...'"
               field="name"
-              [dropdown]="true"
               (onSelect)="onSelect($event)"
-              styleClass="menu-search"
             ></p-autoComplete>
-          </p-overlayPanel>
+        
+          <p-avatar 
+            *ngIf="appStore.userLoggedIn" 
+            image={{appStore.user.image}}
+            shape="circle"
+            size="normal"
+            pTooltip={{appStore.fullName}}
+            onclick="window.location.href='/profile'"
+          />
+        
         <p-button 
-            *ngIf="!appStore.userLoggedIn" 
-            [routerLink]="'/login'"
-        >
-            <i class="pi pi-sign-in" ></i>Login
-        </p-button>
-        <p-button *ngIf="appStore.userLoggedIn" (click)="appStore.logout()">Logout</p-button>
+              *ngIf="!appStore.userLoggedIn" 
+              [routerLink]="'/login'"
+              class="icon-menu-l"
+          >
+              <i class="pi pi-sign-in" ></i><span class="icon-menu-l1">Login</span>
+          </p-button>
+          <i class="pi pi-sign-out" *ngIf="appStore.userLoggedIn" (click)="appStore.logout()"></i>
+        </div>
+        
     </ng-template>
 </p-menubar>

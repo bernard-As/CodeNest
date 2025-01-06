@@ -56,3 +56,25 @@
   z-index: 999;
 }
 
+.menu-image{
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.icon-menu-l{
+  margin-left:5px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+@media (max-width: 576px) { /* For mobile devices */
+  .icon-menu-l1 {
+      display: none;
+  }
+}
+
+.header-image-l {
+  display: inline-flex;
+  // margin: 0px 3px 0px 3px;
+  gap: 5px;
+}
