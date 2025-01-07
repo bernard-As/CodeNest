@@ -10,13 +10,15 @@ import baseApi, { projectApi } from '../../utils/axiosInstances';
 import { ChipModule } from 'primeng/chip';
 import { TooltipModule } from 'primeng/tooltip';
 import { AppStore } from '../app.store';
+import { RouterModule,Router } from '@angular/router';
 @Component({
   selector: 'app-projects',
   standalone: true,
   imports: [
     CommonModule, CardModule, InputTextModule,
     DropdownModule, ButtonModule, DividerModule,
-    FormsModule,ChipModule,TooltipModule
+    FormsModule,ChipModule,TooltipModule,
+    RouterModule
   ],
   templateUrl: './projects.component.html',
   styleUrl: './projects.component.scss'
@@ -37,6 +39,7 @@ export class ProjectsComponent  implements OnInit {
 
   constructor(
     public appStore: AppStore,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -117,6 +120,8 @@ export class ProjectsComponent  implements OnInit {
       this.likedProjects.push(id)
     }
   }
-
+  goToProject(id: string) {
+    this.router.navigate(['/projects', id]);
+  }
 
 }

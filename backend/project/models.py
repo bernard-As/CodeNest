@@ -50,5 +50,6 @@ class Project(models.Model):
     comments = models.ManyToManyField(Comment,blank=True,null=True)
     likes = models.ManyToManyField(Likes,blank=True,null=True)
     image = models.ImageField(upload_to='project_profile/',null=True,blank=True)
+    view = models.PositiveIntegerField(default=0)
     def __str__(self):
         return self.name

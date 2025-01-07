@@ -20,13 +20,17 @@ class ProjectView(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = [
-        'name', 
+        'name',
+        'description'
         'creator__email',
+        'creator__last_name',
+        'creator__first_name',
         'lecturer__email',
         'creator__department__name',
         'lecturer__department__name',
         'advisor__email',
         'advisor__department__name',
+        'tags__name',
     ]
     # @action(detail=False, methods=['create'], permission_classes=[IsAuthenticated],authentication_classes=[TokenAuthentication])
     def create(self, request, *args, **kwargs):
@@ -62,6 +66,7 @@ class ProjectOpenView(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter]
     search_fields = [
         'name',
+        'description'
         'creator__email',
         'creator__last_name',
         'creator__first_name',
@@ -74,15 +79,21 @@ class ProjectOpenView(viewsets.ModelViewSet):
     ]
     def create(self, request, *args, **kwargs):
         return Response({'error':'not_allowed'},status=status.HTTP_403_FORBIDDEN)
+    
     def update(self, request, *args, **kwargs):
         return Response({'error':'not_allowed'},status=status.HTTP_403_FORBIDDEN)
+    
     def list(self, request, *args, **kwargs):
-        projects = self.get_queryset()
         queryset = self.filter_queryset(self.get_queryset())
         serialized_data = self.get_serializer(queryset, many=True).data
         modified_data = [self.modify_data(item) for item in serialized_data] # type: ignore
         return Response(modified_data,200)
 
+    def retrieve(self, request, *args, **kwargs):
+        serialized_data = self.get_serializer(self.get_object()).data
+        modified_data = self.modify_data2(serialized_data)
+        return Response(modified_data,200)
+    
     def modify_data(self, item):
         related_obj = Project.objects.get(pk=item['id'])
         try:
@@ -112,6 +123,66 @@ class ProjectOpenView(viewsets.ModelViewSet):
         item['collaborators'] = len(item['collaborators'])
         item['comments'] = len(item['comments'])
         item['likes'] = len(item['likes'])
+        return item
+    
+    def modify_data2(self, item):
+        related_obj = Project.objects.get(pk=item['id'])
+        try:
+            creator= User.objects.get(pk=item['creator'])
+            item['creator'] = str(creator.first_name + ' ' + creator.last_name)
+        except:
+            pass
+        try:
+            project_type = ProjectTypes.objects.get(pk=item['project_type'])
+            item['project_type'] = {
+                'name':project_type.name,
+                'new':project_type.newFlag
+                }
+        except:
+            pass
+        try:
+            tags = []
+            for t in item['tags']:
+                tag = Tags.objects.get(pk=t)
+                tags.append({
+                    'name':tag.name,
+                    'id':t
+                })
+            item['tags'] = tags
+        except:
+            pass
+        item['collaborators'] = len(item['collaborators'])
+        item['comments'] = len(item['comments'])
+        item['likes'] = len(item['likes'])
+        try:
+            item['collaborators_data'] = [
+                {
+                    'name': str(col.first_name + col.last_name),
+                    'email': col.email,
+                    'is':col.id
+                } for col in related_obj.collaborators
+            ]
+        except:
+            pass
+        likes_data = []
+        try:
+            for like in related_obj.likes:
+                if like.user != None:
+                    likes_data.append({
+                        'name': str(like.user.first_name + like.user.last_name),
+                        'email': like.user.email,
+                        'id': like.user.id
+                    })
+                else:
+                    likes_data.append({
+                        'name':'',
+                        'email':'',
+                        'id':''
+                    })
+        except:
+            pass
+
+        item['likes_data'] = likes_data
         return item
     
 class SearchAPIView(APIView):

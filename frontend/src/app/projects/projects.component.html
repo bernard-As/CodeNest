@@ -16,6 +16,16 @@
         placeholder="Filter by category"
         class="filter-dropdown"
       ></p-dropdown>
+      <p-button
+        routerLink="/projects/create"
+        class="new-project"
+        *ngIf="appStore.userLoggedIn" 
+      >
+        New
+      </p-button>
+      <!-- <a class="p-button" routerLink="/projects/create">
+        New
+      </a> -->
     </div>
 
     <!-- Projects Grid -->
@@ -25,6 +35,7 @@
           class="p-mb-3"
           styleClass="h-full"
           [style]="{height:'400px'}"
+          (click)="goToProject(project.id)"
         >
         <img 
         [src]="project.image || 'https://via.placeholder.com/400x200'" 

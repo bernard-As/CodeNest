@@ -1,0 +1,60 @@
+.project-container {
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+  
+    .project-main {
+      flex: 2;
+      margin-right: 20px;
+    }
+
+    .project-title{
+      width: 70%;
+      align-items: center;
+      align-content: center;
+      text-align: center;
+    }
+
+    .project-metrics{
+      width: 20%;
+    }
+    .project-structure{
+      height:100%;
+      width: 19%;
+      min-width:250px;
+      display: flex;
+    }
+    .containt{
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .project-files{
+      width: 59%;
+      min-width: 500px;
+    }
+    .project-side {
+      flex: 1;
+      position: sticky;
+      top: 20px;
+      max-width: 19%;
+      margin-left:auto;
+    }
+    .project-image{
+      position: relative;
+    }
+    .project-header{
+      margin-bottom: 15px;
+      padding:0;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+  
+      .project-side {
+        display: none;
+      }
+    }
+  }
+  

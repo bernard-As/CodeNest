@@ -1,1 +1,105 @@
-<p>project-view works!</p>
+<div class="project-container">
+    <!-- Main Content -->
+    <div class="project-main">
+      <div
+        class="project-header"
+
+      >
+        <div 
+          class="project-title"
+        >
+          <p-image 
+            *ngIf="projectData?.name"
+            src="{{image}}"
+            alt="{{projectData?.name}}" 
+            width="250" 
+            [preview]="true"
+            class="project-image"
+          />
+          <div
+          >
+            <h3>{{projectData?.name}}</h3>
+            <p-scrollPanel [style]="{ width: '100%', height: '60px' }">
+              {{ projectData?.description }}
+            </p-scrollPanel>
+          </div>
+            
+        </div>
+        <p-card class="project-metrics">
+          <span>Rank: {{projectData?.rank}}</span>
+          <br>
+          <span>Likes: {{metrics?.likes}}</span>
+          <br>
+          <span>Comments: {{metrics?.comments}}</span>
+        </p-card>
+      </div>
+      
+      <!-- Folder and File Structure -->
+      <div class="containt">
+        <p-panel header="Structure"
+          class="project-structure"
+        >
+          Tree structure here
+        </p-panel>
+
+        <p-panel header="Project Files"
+          class="project-files"
+        >
+          <div *ngFor="let folder of projectData?.folders">
+            <h4>{{ folder.name }}</h4>
+            <ul>
+              <li *ngFor="let file of folder.files">
+                {{ file.name }} ({{ file.views }} views)
+                <button *ngIf="isProjectOwner || collaborators.length" class="p-button-danger">Delete</button>
+              </li>
+            </ul>
+          </div>
+          <button *ngIf="isProjectOwner || collaborators.length" class="p-button p-button-success">
+            Upload Files
+          </button>
+        </p-panel>
+
+          <p-panel class="project-side" *ngIf="!isSmallScreen" >
+            <p-tabView>
+              <!-- Comments Tab -->
+              <p-tabPanel header="Comments">
+                <div *ngFor="let comment of comments">
+                  <p-avatar [image]="comment.creator.picture"></p-avatar>
+                  <p>{{ comment.text }}</p>
+                  <span>{{ comment.likes }} likes</span>
+                </div>
+                <textarea [(ngModel)]="newComment" placeholder="Add a comment..."></textarea>
+                <button (click)="addComment()">Post Comment</button>
+              </p-tabPanel>
+        
+              <!-- Likes Tab -->
+              <p-tabPanel header="Likes">
+                <div *ngFor="let like of likes">
+                  <p-avatar [image]="like.user.picture"></p-avatar>
+                  <p>{{ like.user.name }}</p>
+                </div>
+                <button *ngIf="!metrics.liked" (click)="toggleLike()">Like</button>
+              </p-tabPanel>
+        
+              <!-- Metrics Tab -->
+              <p-tabPanel header="Metrics">
+                <p>Views: {{ metrics.views }}</p>
+                <p>Likes: {{ metrics.likes }}</p>
+                <p>Comments: {{ metrics.comments }}</p>
+                <p>Rank: {{ metrics.rank }}</p>
+              </p-tabPanel>
+        
+              <!-- Settings Tab -->
+              <p-tabPanel *ngIf="isProjectOwner" header="Settings">
+                <p>Project Owner Settings Here</p>
+              </p-tabPanel>
+            </p-tabView>
+          </p-panel>
+       </div>
+       
+  
+    <!-- Right Side Panel (Large Screens) -->
+     <ng-template #projectSide>
+    
+    </ng-template>
+  </div>

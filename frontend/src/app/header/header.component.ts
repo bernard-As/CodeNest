@@ -70,15 +70,10 @@ export class HeaderComponent {
 
   showToast(mess:any) {
     this.messageService.add({
-
       severity: mess.severity,
-
       summary: mess.summary,
-
       detail: mess.detail,
-
       life: 3000 // Duration in milliseconds
-
     });
 
   }
