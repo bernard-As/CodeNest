@@ -28,15 +28,22 @@
             pTooltip={{appStore.fullName}}
             onclick="window.location.href='/profile'"
           />
-        
+        <p-button  (click)="toggleDarkMode()">
+          <i *ngIf="mode" class="pi pi-sun"></i>
+          <i *ngIf="!mode" class="pi pi-moon"></i>
+        </p-button>
         <p-button 
-              *ngIf="!appStore.userLoggedIn" 
-              [routerLink]="'/login'"
-              class="icon-menu-l"
-          >
-              <i class="pi pi-sign-in" ></i><span class="icon-menu-l1">Login</span>
-          </p-button>
-          <i class="pi pi-sign-out" *ngIf="appStore.userLoggedIn" (click)="appStore.logout()"></i>
+          *ngIf="!appStore.userLoggedIn" 
+          routerLink="/login"
+          class="icon-menu-l"
+          icon="pi pi-sign-in"
+          label="Login"
+        />
+        <p-button
+        *ngIf="appStore.userLoggedIn" (click)="appStore.logout()"
+          icon="pi pi-sign-out"
+          label="Logout"
+        />
         </div>
         
     </ng-template>

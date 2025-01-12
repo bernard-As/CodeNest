@@ -1,6 +1,6 @@
 import { Component, OnInit,HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TabViewModule } from 'primeng/tabview';
+import { TabPanel, TabViewModule } from 'primeng/tabview';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { AvatarModule } from 'primeng/avatar';
@@ -15,7 +15,9 @@ import { projectApi } from '../../utils/axiosInstances';
 import { CardModule } from 'primeng/card';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { ImageModule } from 'primeng/image';
-
+import { SplitterModule } from 'primeng/splitter';
+import { TabsModule } from 'primeng/tabs';
+import { MenuModule } from 'primeng/menu';
 @Component({
   selector: 'app-project-view',
   standalone: true,
@@ -24,7 +26,8 @@ import { ImageModule } from 'primeng/image';
     AvatarModule,FileUploadModule,PanelModule,
     DialogModule,TableModule,FormsModule,
     CommonModule,CardModule,ScrollPanelModule,
-    ImageModule,
+    ImageModule,SplitterModule,TabViewModule,
+    MenuModule,DialogModule
   ],
   templateUrl: './project-view.component.html',
   styleUrl: './project-view.component.scss',
@@ -39,15 +42,35 @@ export class ProjectViewComponent {
   collaborators: any[] = [];
   isSmallScreen:any = null;
   isProjectOwner: boolean = false;
+  isCollaborator: boolean = false;
   showFloatingPanel: boolean = false;
   newComment: string = '';
   image:any = 'codenest.webp';
+  showCreateFolder: boolean = false;
+  newFolderName: string = '';
+  fileMenuItem:any = [
+    {
+      label:'Upload file',
+      icon:'pi pi-file-plus',
+      command: ()=>console.log('upload file')
+      
+    },
+    {
+      label:'New folder',
+      icon:'pi pi-folder-plus',
+      command: ()=>this.showDialog()
+      
+    }
+  ]
+
+
   constructor(private route: ActivatedRoute, private appStore: AppStore) {}
 
   ngOnInit(): void {
     this.projectId = this.route.snapshot.paramMap.get('id') || '';
     this.fetchProjectData();
-    this.checkScreenSize()
+    this.checkScreenSize();
+    this.fetchProjectData2();
   }
 
   async fetchProjectData() {
@@ -56,14 +79,24 @@ export class ProjectViewComponent {
     if (response) {
       const data = response.data
       this.projectData = data;
-      this.comments = data.comments || [];
-      this.likes = data.likes || [];
+      this.comments = data.comments_data || [];
+      this.likes = data.likes_data || [];
       this.metrics = data.metrics || {};
-      this.isProjectOwner = data.is_owner || false;
       this.collaborators = data.collaborators || [];
       this.metrics.likes = data.likes;
       this.metrics.comments = data.comments;
       this.image = data.image
+    }
+  }
+
+  async fetchProjectData2(){
+    const response:any = await projectApi.get(`project/${this.projectId}/`);
+    if(response.status===200){
+      const data = response.data
+      if(data.isAllowed){
+        this.isCollaborator = data.isCollaborator;
+        this.isProjectOwner = data.isProjectOwner;
+      }
     }
   }
 
@@ -90,6 +123,21 @@ export class ProjectViewComponent {
     // if (response) {
     //   this.projectData = { ...this.projectData, ...settings };
     // }
+  }
+
+  async createFolder(parent:string = ''){
+    const response = await projectApi.post('folder/',{
+      name:this.newFolderName,
+      parent_folder:parent ===''?null:parent,
+      project:parent ===''?this.projectId:null
+    })
+    if (response.status===201){
+      this.showCreateFolder = false;
+    }
+  }
+
+  showDialog(){
+    this.showCreateFolder = !this.showCreateFolder
   }
 
   @HostListener('window:resize', ['$event'])

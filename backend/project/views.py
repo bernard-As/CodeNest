@@ -44,6 +44,19 @@ class ProjectView(viewsets.ModelViewSet):
     
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
+    
+    def retrieve(self, request, *args, **kwargs):
+        project = self.get_object()
+        user = request.user
+        if user not in project.collaborators.all() and  user.pk != project.creator.pk:
+            return Response({'message':'not allowed'}, status=status.HTTP_403_FORBIDDEN)
+        isProjectOwner = user.pk == project.creator.pk
+        return Response({
+            'isAllowed': True,
+            'isProjectOwner':isProjectOwner,
+            'isCollaborator': not isProjectOwner
+
+        }, status=status.HTTP_200_OK)
 
 class TypesRetrieve(APIView):
     authentication_classes = []
@@ -183,6 +196,56 @@ class ProjectOpenView(viewsets.ModelViewSet):
             pass
 
         item['likes_data'] = likes_data
+        item['structure'] = []
+        try:
+            project_folder = related_obj.project_folder.all().order_by('name')
+            folders_data = [folderLoop(folder) for folder in project_folder]
+            item['folders'] = folders_data
+            project_item = related_obj.project_file.all().order_by('file')
+            project_item_serialized = FilesSerializer(project_item,many=True)
+            for file in project_item_serialized.data:
+                file_obj = Files.objects.get(pk=file['id'])
+                item['structure'].append({
+                    'type':'file',
+                    'id': file['id'],
+                    'file': file,  # URL to access the file
+                    'timestamp': file_obj.timestamp.isoformat(),
+                    'tags': [tag.name for tag in file_obj.tags.all()],  # Assuming Tags has a 'name' field
+                    'comments': [comment.text for comment in file_obj.comments.all()]  # Assuming Comment has a 'text' field
+                })
+        except:
+            pass
+
+        def folderLoop(self,folder):
+            """Recursively serialize a folder and its contents."""
+            folder_data = {
+                'type':'folder',
+                'id': folder.id,
+                'name': folder.name,
+                'timestamp': folder.timestamp.isoformat(),
+                'files': [],
+                'subfolders': []
+            }
+
+            # Get all files in the current folder
+            files = folder.files_set.all()
+            serialized_files = FilesSerializer(files,many=True)
+            for file in serialized_files.data:
+                file_obj = Files.objects.get(pk=file['id'])
+                folder_data['files'].append({
+                    'id': file['id'],
+                    'file': file,  # URL to access the file
+                    'timestamp': file_obj.timestamp.isoformat(),
+                    'tags': [tag.name for tag in file_obj.tags.all()],  # Assuming Tags has a 'name' field
+                    'comments': [comment.text for comment in file_obj.comments.all()]  # Assuming Comment has a 'text' field
+                })
+            # Get all subfolders
+            subfolders = folder.subfolders.all()
+            for subfolder in subfolders:
+                folder_data['subfolders'].append(folderLoop(subfolder))
+
+            return folder_data
+
         return item
     
 class SearchAPIView(APIView):
@@ -250,3 +313,31 @@ class OpenLikedItem(APIView):
                 project.save()
 
         return Response({'message':'success'},201)
+
+class FolderView(viewsets.ModelViewSet):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = Folder.objects.all()
+    serializer_class = FolderSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = [
+        'name',
+    ]
+
+class OpenFolderView(viewsets.ModelViewSet):
+    authentication_classes = []
+    permission_classes = []
+    queryset = Folder.objects.all()
+    serializer_class = ProjectSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = [
+        'name',
+    ]
+    def create(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_403_FORBIDDEN)
+    def update(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_403_FORBIDDEN)
+    def put(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_403_FORBIDDEN)
+    def patch(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_403_FORBIDDEN)

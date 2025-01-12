@@ -1,0 +1,116 @@
+<div class="project-container">
+    <!-- Main Content -->
+    <div class="project-main">
+      <div
+        class="project-header"
+
+      >
+        <div 
+          class="project-title"
+        >
+          <p-image 
+            *ngIf="projectData?.name"
+            src="{{image}}"
+            alt="{{projectData?.name}}" 
+            width="250" 
+            [preview]="true"
+            class="project-image"
+          />
+          <div
+          >
+            <h3>{{projectData?.name}}</h3>
+            <p-scrollPanel [style]="{ width: '100%', height: '60px' }">
+              {{ projectData?.description }}
+            </p-scrollPanel>
+          </div>
+            
+        </div>
+        <p-card class="project-metrics">
+          <span>Rank: {{projectData?.rank}}</span>
+          <br>
+          <span>Likes: {{metrics?.likes}}</span>
+          <br>
+          <span>Comments: {{metrics?.comments}}</span>
+        </p-card>
+      </div>
+      
+      <!-- Folder and File Structure -->
+      <div class="containt">
+        <p-panel
+          class="project-structure"
+        >
+          <ng-template #header>
+            <div class="flex items-center gap-2">
+              <h4 style="font-size: bold;">
+                <i class="pi pi-file-o"></i>
+                <span>Files</span>
+              </h4>
+          </div>
+          </ng-template>
+        </p-panel>
+        <ng-template #icons >
+          <p-button icon="pi pi-cog" severity="secondary" rounded text (click)="menu.toggle($event)" />
+          <p-menu #menu id="config_menu" [model]="fileMenuItem" [popup]="true"/>
+        </ng-template>
+        <p-dialog [(visible)]="showCreateFolder" [modal]="true" [style]="{ width: '25rem' }">
+          <ng-template #header>
+            <div class="inline-flex items-center justify-center gap-2">
+                <span class="font-bold whitespace-nowrap">Enter New Folder Name</span>
+            </div>
+          </ng-template>
+          <div class="flex items-center gap-4 mb-4">
+            <label for="name" class="font-semibold w-24">Name</label>
+            <input 
+              pInputText id="name" 
+              class="flex-auto" 
+              autocomplete="off" 
+              [(ngModel)]="newFolderName"  
+              />
+          </div>
+          <div class="flex justify-end gap-2">
+            <p-button label="Cancel" severity="secondary" (click)="showCreateFolder = false" />
+            <p-button label="Save" (click)="createFolder()" />
+        </div>
+        </p-dialog>
+        <p-panel
+          class="project-files"
+        >
+        <ng-template #header>
+            <div class="flex items-center gap-2">
+                <h4 style="font-size: bold;">
+                  <i class="pi pi-file-o"></i>
+                  <span>Files</span>
+                </h4>
+            </div>
+        </ng-template>
+        
+          <div *ngFor="let folder of projectData?.folders">
+            <h4>{{ folder.name }}</h4>
+            <ul>
+              <li *ngFor="let file of folder.files">
+                {{ file.name }} ({{ file.views }} views)
+                <button *ngIf="isProjectOwner || collaborators.length" class="p-button-danger">Delete</button>
+              </li>
+            </ul>
+          </div>
+        </p-panel>
+
+        <p-tabView class="project-side">
+          <p-tabPanel header="Comments">
+            <div *ngFor="let comment of comments">
+              <p-avatar [image]="comment.creator.picture"></p-avatar>
+              <p>{{ comment.text }}</p>
+              <span>{{ comment.likes }} likes</span>
+            </div>
+            <textarea [(ngModel)]="newComment" placeholder="Add a comment..."></textarea>
+            <button (click)="addComment()">Post Comment</button>
+          </p-tabPanel>
+          <p-tabPanel header="Likes">
+            <div *ngFor="let like of likes">
+              <!-- <p-avatar [image]="like.user.picture"></p-avatar> -->
+              <!-- <p>{{ like.user.name }}</p> -->
+            </div>
+          </p-tabPanel>
+        </p-tabView>
+       </div>
+  </div>

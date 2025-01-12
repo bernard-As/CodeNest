@@ -8,13 +8,12 @@ import { PanelModule } from 'primeng/panel';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
-import { HttpClientModule } from '@angular/common/http';
-import { ChipsModule } from 'primeng/chips';
 import { ButtonModule } from 'primeng/button';
 import { AppStore } from '../app.store';
 import { accountApiM } from '../../utils/axiosInstances';
 import { autorun } from 'mobx';
 import { TooltipModule } from 'primeng/tooltip';
+import { MultiSelectModule } from 'primeng/multiselect';
 @Component({
   selector: 'app-profile',
   standalone: true,
@@ -22,7 +21,7 @@ import { TooltipModule } from 'primeng/tooltip';
     CommonModule,CardModule,FormsModule,
     FileUploadModule,DividerModule,PanelModule,
     InputTextModule,DropdownModule,AvatarModule,
-    HttpClientModule,ChipsModule,ButtonModule,
+    ButtonModule,MultiSelectModule,
     TooltipModule,
   ],
   templateUrl: './profile.component.html',

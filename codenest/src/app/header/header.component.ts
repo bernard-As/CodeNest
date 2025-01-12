@@ -11,6 +11,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
 import { TooltipModule } from 'primeng/tooltip';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -18,7 +19,8 @@ import { TooltipModule } from 'primeng/tooltip';
   imports: [
     MenubarModule,ButtonModule,FormsModule,
     CommonModule,AutoCompleteModule,OverlayPanelModule,
-    ToastModule,AvatarModule,TooltipModule
+    ToastModule,AvatarModule,TooltipModule,
+    RouterModule
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
@@ -38,6 +40,7 @@ export class HeaderComponent {
     { name: 'CodeNest Frontend' },
     { name: 'Angular Tutorials' },
   ];
+  mode: Boolean = false;
   @ViewChild('searchPanel') searchPanel!: OverlayPanel; // Declare the reference
 
   items = [
@@ -92,7 +95,14 @@ export class HeaderComponent {
     this.appStore.verifyToken();
   }
   //Toast Message displayer
-  
+  toggleDarkMode() {
+    const element = document.querySelector('html');
+      element?.classList.toggle('my-app-dark');
+      this.appStore.darkMode = !this.appStore.darkMode;
+      this.mode = this.appStore.darkMode;
+      console.log(this.mode);
+      
+    }
   
 
 }

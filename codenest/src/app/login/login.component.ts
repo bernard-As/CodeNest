@@ -32,7 +32,7 @@ export class LoginComponent {
   constructor(public appStore: AppStore,
     private messageService: MessageService
    ){}
-  email: string = '';
+  email: string = localStorage.getItem('email')||'';
   password: string = '';
   auth_code: string = '';
   loginError: boolean = false;
@@ -69,7 +69,7 @@ export class LoginComponent {
       this.loginError = true;
       return;
     }
-    
+    localStorage.setItem('email',this.email);
     if (!this.email.trim().endsWith('@rdu.edu.tr')) {
       this.errorText = 'Email must be an rdu.edu.tr email'
       this.loginError = true;

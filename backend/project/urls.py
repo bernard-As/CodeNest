@@ -5,6 +5,8 @@ from .views import *
 router = DefaultRouter()
 router.register(r'project', ProjectView, basename='project')
 router.register(r'open-project', ProjectOpenView, basename='no token projects')
+router.register(r'folder', FolderView, basename='folder')
+router.register(r'open-folder', FolderView, basename='open folder')
 
 urlpatterns = [
     path('', include(router.urls)),

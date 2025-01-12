@@ -19,7 +19,7 @@ export class AppStore {
     show:false,
     toView:null
   }
-
+  darkMode = false;
   constructor() {
     makeAutoObservable(this);
   }

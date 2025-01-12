@@ -11,9 +11,8 @@ import { ButtonModule } from 'primeng/button';
 import { accountApiM, projectApi, projectApiM } from '../../utils/axiosInstances';
 import { ToastModule } from 'primeng/toast';
 import { FileUploadModule } from 'primeng/fileupload';
-import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ChipModule } from 'primeng/chip';
-
+import { TextareaModule } from 'primeng/textarea';
 @Component({
   selector: 'app-create-project',
   standalone: true,
@@ -21,7 +20,7 @@ import { ChipModule } from 'primeng/chip';
     CommonModule,DropdownModule,FormsModule,
     FieldsetModule,MultiSelectModule,CardModule,
     ButtonModule,ToastModule,FileUploadModule,
-    InputTextareaModule,ChipModule
+    ChipModule,TextareaModule,
   ],
   templateUrl: './create-project.component.html',
   styleUrl: './create-project.component.scss',

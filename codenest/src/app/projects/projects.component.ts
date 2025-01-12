@@ -18,7 +18,7 @@ import { RouterModule,Router } from '@angular/router';
     CommonModule, CardModule, InputTextModule,
     DropdownModule, ButtonModule, DividerModule,
     FormsModule,ChipModule,TooltipModule,
-    RouterModule
+    RouterModule,
   ],
   templateUrl: './projects.component.html',
   styleUrl: './projects.component.scss'
