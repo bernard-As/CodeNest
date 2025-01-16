@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,7 +43,8 @@ INSTALLED_APPS = [
     'django_filters',
     'knox',
     'account',
-    'project'
+    'project',
+    'channels'
 
 ]
 
@@ -150,6 +152,12 @@ REST_FRAMEWORK = {
     ],
 }
 
+ASGI_APPLICATION = 'codenest_backend.asgi.application'
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587

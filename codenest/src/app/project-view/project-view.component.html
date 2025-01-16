@@ -1,9 +1,9 @@
+
 <div class="project-container">
     <!-- Main Content -->
     <div class="project-main">
       <div
         class="project-header"
-
       >
         <div 
           class="project-title"
@@ -38,79 +38,139 @@
       <div class="containt">
         <p-panel
           class="project-structure"
+          styleClass="w-full"
         >
           <ng-template #header>
-            <div class="flex items-center gap-2">
-              <h4 style="font-size: bold;">
-                <i class="pi pi-file-o"></i>
-                <span>Files</span>
-              </h4>
-          </div>
+            <i class="pi pi-sitemap"></i>
+            <span style="font-weight: bold;">Structure</span>
           </ng-template>
-        </p-panel>
-        <ng-template #icons >
-          <p-button icon="pi pi-cog" severity="secondary" rounded text (click)="menu.toggle($event)" />
-          <p-menu #menu id="config_menu" [model]="fileMenuItem" [popup]="true"/>
-        </ng-template>
-        <p-dialog [(visible)]="showCreateFolder" [modal]="true" [style]="{ width: '25rem' }">
-          <ng-template #header>
-            <div class="inline-flex items-center justify-center gap-2">
-                <span class="font-bold whitespace-nowrap">Enter New Folder Name</span>
+          <ng-template #icons *ngIf="showUpload">
+            <p-button icon="pi pi-upload" severity="secondary" rounded text (click)="menu.toggle($event)" />
+            <p-menu #menu id="config_menu" [model]="fileMenuItem" [popup]="true"/>
+          </ng-template>
+          <!-- create folder dialogue -->
+          <p-dialog [(visible)]="showCreateFolder" [modal]="true">
+            <ng-template #header>
+              <div class="inline-flex items-center justify-center gap-2">
+                  <span class="font-bold whitespace-nowrap">Enter New Folder Name</span>
+              </div>
+            </ng-template>
+            <div class="flex items-center gap-4 mb-4">
+              <label for="name" class="font-semibold w-24">Name</label>
+              <input 
+                pInputText id="name" 
+                class="flex-auto" 
+                autocomplete="off" 
+                [(ngModel)]="newFolderName"  
+                />
             </div>
-          </ng-template>
-          <div class="flex items-center gap-4 mb-4">
-            <label for="name" class="font-semibold w-24">Name</label>
-            <input 
-              pInputText id="name" 
-              class="flex-auto" 
-              autocomplete="off" 
-              [(ngModel)]="newFolderName"  
-              />
-          </div>
-          <div class="flex justify-end gap-2">
-            <p-button label="Cancel" severity="secondary" (click)="showCreateFolder = false" />
-            <p-button label="Save" (click)="createFolder()" />
-        </div>
-        </p-dialog>
+            <div class="flex justify-end gap-2">
+              <p-button label="Cancel" severity="secondary" (click)="showCreateFolder = false" />
+              <p-button label="Save" (click)="createFolder()" />
+            </div>
+          </p-dialog>
+          <!-- <ng-template #content class="project-structure-tree"> -->
+          <p-tree [value]="structure" styleClass="w-full" selectionMode="single" [(selection)]="selectedFile" 
+            scrollHeight="300px" [virtualScroll]="true" [virtualScrollItemSize]="46"
+            class="srtucture-tree"
+            [highlightOnSelect]="true"
+            (onNodeSelect)="onNodeSelect($event)"
+          />
+          <!-- </ng-template> -->
+        </p-panel>
         <p-panel
           class="project-files"
         >
         <ng-template #header>
             <div class="flex items-center gap-2">
                 <h4 style="font-size: bold;">
-                  <i class="pi pi-file-o"></i>
-                  <span>Files</span>
+                  <i class={{selectedIcon}}></i>
+                  <span >{{selectedName}}</span>
                 </h4>
             </div>
         </ng-template>
-        
-          <div *ngFor="let folder of projectData?.folders">
-            <h4>{{ folder.name }}</h4>
-            <ul>
-              <li *ngFor="let file of folder.files">
-                {{ file.name }} ({{ file.views }} views)
-                <button *ngIf="isProjectOwner || collaborators.length" class="p-button-danger">Delete</button>
-              </li>
-            </ul>
+        <ng-template #icons >
+          <p-button icon="pi pi-arrow-up" severity="secondary" pTooltip="Present" rounded text [routerLink]="['/projects/presentation/',this.projectId]" />
+          <p-button icon="pi pi-play" *ngIf="currentFileCanRun" severity="secondary" rounded text (click)="runCode()" />
+          <p-button icon="pi pi-plreplayay" *ngIf="ran" severity="secondary" rounded text (click)="runCode()" />
+          <p-button icon="pi pi-pause" [disabled]="true" *ngIf="runLoading" severity="secondary" rounded text/>
+          <p-button icon="pi pi-upload" *ngIf="showUpload" severity="secondary" rounded text (click)="menu.toggle($event)" />
+          <p-menu #menu id="config_menu"  [model]="fileMenuItem" [popup]="true"/>
+        </ng-template>
+        <!-- <ng-template #content> -->
+          <div *ngIf="contentType==='folder'">
+            <p-tree [value]="selectedFile.children" styleClass="w-full" selectionMode="single" [(selection)]="selectedFile" 
+            scrollHeight="300px" [virtualScroll]="true" [virtualScrollItemSize]="46"
+            class="srtucture-tree"
+            [highlightOnSelect]="true"
+            (onNodeSelect)="onNodeSelect($event)"
+            />
           </div>
+        <!-- </ng-template> -->
+        <div *ngIf="isFileContentLoading" class="loading-spinner">
+          <p>Loading file content...</p>
+        </div>
+        <div *ngIf="contentType==='file'&&!(showConsole&&!runLoading)">
+          <iframe [src]="iframeSrc" 
+          
+          frameborder="0" style="width: 100%; min-height: 500px;"></iframe>
+        </div>
+          <div *ngIf="showConsole&&!runLoading">
+            <p-editor
+              [(ngModel)]="consoleContent"
+              [style]="{ height: '300px' }"
+              [readonly]="true"
+            ></p-editor>
+          </div>
+          <div *ngIf="runLoading">
+            Code running..........
+            Please wait!
+          </div>
+          <!-- <p-editor 
+            [readonly]="true" 
+            [style]="{ height: '320px' }" 
+            [(ngModel)]="fileContent">
+          </p-editor> -->
         </p-panel>
 
         <p-tabView class="project-side">
           <p-tabPanel header="Comments">
-            <div *ngFor="let comment of comments">
-              <p-avatar [image]="comment.creator.picture"></p-avatar>
-              <p>{{ comment.text }}</p>
-              <span>{{ comment.likes }} likes</span>
+            <div class="comment-display">
+              <div *ngFor="let comment of comments" >
+                <p-avatar [image]="comment.image" icon="pi pi-user"></p-avatar>
+                <span>{{comment.name}}</span>
+                <p>{{ comment.text }}</p>
+                <!-- <span>{{ comment.likes }} likes</span> -->
+                <p-divider></p-divider>
+              </div>
             </div>
-            <textarea [(ngModel)]="newComment" placeholder="Add a comment..."></textarea>
-            <button (click)="addComment()">Post Comment</button>
+            
+            <textarea [(ngModel)]="newComment" placeholder="Add a comment..." pTextarea></textarea>
+            <button pButton (click)="addComment()">Post Comment</button>
           </p-tabPanel>
           <p-tabPanel header="Likes">
+            <button pButton (click)="toggleLike()" icon="pi pi-thumbs-up">Like</button>
+
             <div *ngFor="let like of likes">
-              <!-- <p-avatar [image]="like.user.picture"></p-avatar> -->
-              <!-- <p>{{ like.user.name }}</p> -->
+              <p-avatar [image]="like.image" icon="pi pi-user"></p-avatar>
+              <span>{{ like.name }}</span>
+              <p></p>
             </div>
+          </p-tabPanel>
+          <p-tabPanel header="Setting" *ngIf="isProjectOwner">
+          <a [routerLink]="['/projects/setting', projectId]" class="p-button">
+            Open Setting
+          </a>
           </p-tabPanel>
         </p-tabView>
        </div>
   </div>
+  <input 
+  type="file" 
+  id="hiddenFileInput" 
+  style="display: none;" 
+  (change)="onUpload($event)" 
+  multiple/>
+  <iframe [src]="iframeSrc" 
+          
+          frameborder="0" style="display: none;"></iframe>

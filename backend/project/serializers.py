@@ -6,7 +6,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = '__all__'
-        read_only_fields = ['id']
+        # read_only_fields = ['id']
 
 class FolderSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,5 +17,11 @@ class FolderSerializer(serializers.ModelSerializer):
 class FilesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Files
+        fields = '__all__'
+        read_only_fields = ['id']
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
         fields = '__all__'
         read_only_fields = ['id']

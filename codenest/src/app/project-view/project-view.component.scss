@@ -21,9 +21,24 @@
     .project-structure{
       height:100%;
       width: 19%;
-      min-width:200px;
-      display: flex;
+      min-width:250px;
+      // display: flex;
       margin: 5px;
+      // overflow: hidden;
+      .srtucture-tree{
+        padding: 0 !important;
+        width: 600px;
+      }
+      .p-component{
+        width: 100%;
+      }
+    }
+    .project-structure-tree{
+      max-height: 4vh;
+      overflow-y: auto;
+      .w-full{
+        padding: 0;
+      }
     }
     .containt{
       display: flex;
@@ -31,7 +46,7 @@
     }
     .project-files{
       width: 59%;
-      min-width: 500px;
+      min-width: 350px;
       margin: 5px;
     }
     .project-side {
@@ -42,7 +57,12 @@
       // margin-left:auto;
       margin: 5px;
       width: fit-content;
-      min-width:250px;
+      min-width:200px;
+      max-width: 500px;
+    }
+    .comment-display{
+      height: 300px;
+      overflow-y: auto;
     }
     .project-image{
       position: relative;
@@ -57,5 +77,24 @@
     @media (max-width: 768px) {
       flex-direction: column;
     }
+  }
+  ::ng-deep .p-editor-content pre.output {
+    color: green;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  
+  ::ng-deep .p-editor-content pre.error {
+    color: red;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  
+  ::ng-deep .p-editor-content pre.warning {
+    color: orange;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  
+  ::ng-deep .p-editor-content pre {
+    white-space: pre-wrap; /* Preserve formatting */
+    word-break: break-word; /* Prevent overflow */
   }
   

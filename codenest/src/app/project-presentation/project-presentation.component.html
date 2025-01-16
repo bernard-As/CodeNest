@@ -1,11 +1,31 @@
-<!-- app.component.html -->
-<p-splitter styleClass="custom-splitter" [style]="{'height': '500px'}">
-    <div size="50">
-      <h2>Left Panel</h2>
-      <p>This is the left panel content.</p>
+<div class="presentation-container">
+    <!-- Fullscreen Presentation -->
+    <div *ngIf="isPresenting && (isProjectCreator || isCollaborator)" class="presentation-fullscreen">
+      <button pButton label="Stop Presentation" class="p-button-danger" (click)="stopPresentation()"></button>
+      <iframe
+        [src]="sanitizedFileContent"
+        frameborder="0"
+        class="file-iframe"
+      ></iframe>
     </div>
-    <div size="50">
-      <h2>Right Panel</h2>
-      <p>This is the right panel content.</p>
+  
+    <!-- Non-Presenters -->
+    <div *ngIf="!isProjectCreator && !isCollaborator" class="non-presenter-container">
+      <textarea
+        pInputTextarea
+        [(ngModel)]="message"
+        rows="3"
+        placeholder="Type a message to the presenter..."
+      ></textarea>
+      <button pButton label="Send Message" icon="pi pi-send" class="p-button-primary" (click)="sendMessage()"></button>
     </div>
-  </p-splitter>
+  
+    <!-- Start Presentation Button -->
+    <div *ngIf="!isPresenting && (isProjectCreator || isCollaborator)">
+      <button pButton label="Start Presentation" icon="pi pi-play" class="p-button-success" (click)="startPresentation()"></button>
+    </div>
+  
+    <!-- Toast Notification -->
+    <p-toast></p-toast>
+  </div>
+  

@@ -46,12 +46,18 @@ class Folder(models.Model):
     timestamp =  models.DateTimeField(auto_now_add=True)
     parent_folder = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='subfolders')
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, blank=True, related_name='project_folder')
-
+    
 class Files(models.Model):
     timestamp =  models.DateTimeField(auto_now_add=True)
     file = models.FileField(upload_to='files')
-    tags = models.ManyToManyField(Tags)
+    tags = models.ManyToManyField(Tags,blank=True)
     comments = models.ManyToManyField(Comment,blank=True)
-    folder = models.ForeignKey(Folder, on_delete=models.CASCADE, null=True, blank=True)
+    folder = models.ForeignKey(Folder, on_delete=models.CASCADE, null=True, blank=True,)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, blank=True, related_name='project_file')
 
+class Presentation(models.Model):
+    file = models.ForeignKey(Files,on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    number_of_participant = models.SmallIntegerField(default=0)
+    host = models.ForeignKey(User, on_delete=models.CASCADE)

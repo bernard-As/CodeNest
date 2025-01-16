@@ -7,6 +7,7 @@ import { CreateProjectComponent } from './create-project/create-project.componen
 import { ProjectsComponent } from './projects/projects.component';
 import { ProjectViewComponent } from './project-view/project-view.component';
 import { ProjectPresentationComponent } from './project-presentation/project-presentation.component';
+import { ProjectSettingComponent } from './project-setting/project-setting.component';
 
 export const routes: Routes = [
     { path: '', component: AppComponent }, 
@@ -18,9 +19,13 @@ export const routes: Routes = [
         path: 'projects', 
         children: [
             { path: '', component: ProjectsComponent },
-            { path: ':id', component: ProjectViewComponent },
-            { path: 'setting', component: ProfileComponent },
             { path: 'create', component: CreateProjectComponent },
+            { path: 'setting',
+                children:[
+                  { path: ':id', component: ProjectSettingComponent },
+                  
+                ]
+            },
             {path:'presentation', component: ProjectPresentationComponent},
             { 
                 path: 'presentation', 
@@ -29,6 +34,7 @@ export const routes: Routes = [
                     {path:':id', component: ProjectPresentationComponent},
                 ]
             },
+            { path: ':id', component: ProjectViewComponent },
         ],
     }, 
 ];

@@ -1,0 +1,79 @@
+<p-toast/>
+<div *ngIf="loaded">
+  <div *ngIf="isProjectOwner" class="create-project-wrapper p-fluid" [ngClass]="{'mobile-view': isMobile}">
+    <ng-container *ngIf="!isMobile || showForm">
+      <form (ngSubmit)="onSubmit()" class="create-project-form">
+        <div *ngIf="project.image">
+          <img [src]="image" alt="Project Image" width="300px" height="200px">
+        </div>
+        <p-fieldset legend="Project Details">
+          <div class="p-field">
+            <label for="name">Project Name </label>
+            <input 
+                id="name" 
+                type="text" 
+                pInputText 
+                [(ngModel)]="project.name" 
+                name="name" 
+                required 
+            />
+          </div>
+
+          <div class="p-field">
+            <label for="type">Type</label>
+            <p-dropdown id="type" [options]="projectTypes" [(ngModel)]="project.type" name="type" required></p-dropdown>
+          </div>
+
+          <ng-container *ngIf="!compactView">
+            <div class="p-field">
+              <label for="lecturer">Lecturer</label>
+              <p-dropdown id="lecturer" [options]="lecturers" [(ngModel)]="project.lecturer" name="lecturer"></p-dropdown>
+            </div>
+
+            <div class="p-field">
+              <label for="advisor">Advisor</label>
+              <p-dropdown id="advisor" [options]="advisors" [(ngModel)]="project.advisor" name="advisor"></p-dropdown>
+            </div>
+          </ng-container>
+
+          <!-- <div class="p-field">
+            <label for="collaborators">Collaborators</label>
+            <p-multiSelect id="collaborators" [options]="collaborators" [(ngModel)]="project.collaborators" name="collaborators" display="chip"></p-multiSelect>
+          </div> -->
+          <div class="p-field">
+            <label for="image">Project Image</label>
+            <input id="image" type="file" pInputText (change)="onImageUpload($event)" accept="image/*"/>
+          </div>
+          <div class="p-field">
+            <label for="description">Description</label>
+              <textarea 
+                pInputTextarea 
+                [(ngModel)]="project.description" 
+                name="description"
+                placeholder="Enter project description here..."
+              ></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="submit" pButton label="Update Project" [disabled]="!isFormValid()"></button>
+          </div>
+        </p-fieldset>
+      </form>
+    </ng-container>
+
+    <ng-container *ngIf="isMobile && !showForm">
+      <button pButton type="button" icon="pi pi-plus" label="Update Project" (click)="showForm = true"></button>
+    </ng-container>
+  
+  </div>
+
+<div *ngIf="!isProjectOwner"> 
+  <h1>
+  You do not have access to this page
+</h1>
+</div>
+</div>
+<div *ngIf="!loaded">
+  <h1>
+  Loading...
+</h1>
+</div>
